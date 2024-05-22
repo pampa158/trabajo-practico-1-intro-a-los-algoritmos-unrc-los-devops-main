@@ -31,6 +31,7 @@ public class Mensaje
     public Mensaje()
     {
         lineas = new ArrayList<String>();
+        //
     }
 
     /**

@@ -75,8 +75,19 @@ public class Mensaje
      */
     public void agregarLinea(int pos, String linea)
     {
-        // TODO: Implementar este método
+        if (linea == null)
+            throw new IllegalArgumentException("La linea a agregar no debe ser null.");
+        if (linea.length() > LONG_MAX_LINEA)
+            throw new IllegalArgumentException("Longitud invalida. La linea no debe tener más de 80 caracteres.");
+        if (!esAscii(linea)) 
+            throw new IllegalArgumentException("La linea a agregar contiene caracteres no ascii."); 
+        if(pos < 0 || pos > lineas.size()){
+            throw new IllegalArgumentException("La posición ingresada no es válida");
+        }else{
+            lineas.add(pos, linea);
+        }
     }
+    
     
     /**
      * Elimina la línea de una posición determinada del mensaje.
@@ -173,5 +184,5 @@ public class Mensaje
             return ok;
         }
     }
-    
 }
+

@@ -75,7 +75,8 @@ public class DecodificadorMensajes
             int numAscii = (int) cadena.charAt(i);
             // variable para guardar el tamaño del arreglo
             int tamañoArreglo = codigoEncripcion.length;
-
+            System.out.println(tamañoArreglo);
+            System.out.println(cadena.length());
             // condicional para movernos dentro de cada posicion del arreglo una y otra vez
             if(index >= 0 && index < tamañoArreglo){
                 // condicional para manejarnos dentro del rango 0-127 en ascii
@@ -92,8 +93,9 @@ public class DecodificadorMensajes
             // reiniciar el índice si se llega al final del arreglo de encriptación
             if(index >= tamañoArreglo){
                 index = 0;
-             }
+            }
         }
+           
         // convertir el arreglo de caracteres a una cadena y imprimir el mensaje desencriptado
         String mensajeDecodificado = new String(nuevoMensaje);
         System.out.println(mensajeDecodificado);

@@ -86,6 +86,7 @@ public class Mensaje
         }else{
             lineas.add(pos, linea);
         }
+        
     }
     
     

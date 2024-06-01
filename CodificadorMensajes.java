@@ -79,7 +79,7 @@ public class CodificadorMensajes
     /**
      * Cambia el mensaje a codificar.
      * Precondición: el nuevo mensaje no puede ser null.
-     * Postcondición: el mensaje a codificar se actualiza, y se vuelve el objeto
+     * Postcondición: el mensaje a codificar se actualiza, y se vuel****ve el objeto
      * a un estado de "aún no codificado".
      * @param msg es el mensaje a codificar.
      */

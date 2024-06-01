@@ -64,6 +64,37 @@ public class DecodificadorMensajes
         *       throw new IllegalStateException("El mensajeaun no fue descifrado");
         */
         String cadena = mensajeADecodificar.toString();
+        desencriptarCadenaV2(cadena, codigoEncripcion);
+        System.out.println(mensajeDecodificado);
+    }
+    
+    /**
+     * Retorna el mensaje ya decodificado/descifrado.
+     * Precondición: el mensaje debe haber sido decodificado previamente (i.e., 
+     * se debe haber llamado a decodificarMensaje()).
+     * Postcondicion: se retorna el mensaje descifrado/decodificado.
+     * @return el mensaje descifrado.
+     */
+    public Mensaje obtenerMensajeDecodificado() {
+        if (mensajeDecodificado == null)
+            throw new IllegalStateException("Mensaje aún no decodificado");
+        return mensajeDecodificado;
+    }
+    
+    /**
+     * Desencripta una cadena, dado un código numérico. Se usan los dígitos del código
+     * para reemplazar cada caracter de la cadena por el caracter correspondiente a 
+     * "trasladar" el mismo el número de lugares que indica el código, en sentido inverso
+     * al de encripción (es decir, se resta el código al caracter). El código tiene
+     * múltiples valores: se usa el primero para el primer caracter, el segundo para el 
+     * segundo, y así sucesivamente. Si se agota el código, se vuelve al comienzo del mismo, 
+     * hasta desencriptar toda la cadena.
+     * Precondición: tanto str como codigo no deben ser nulos.
+     * @param str es la cadena a desencriptar
+     * @param codigo es el código a utilizar para la desencripción
+     */
+    public String desencriptarCadena(String str, int[] codigo) {
+        String cadena = mensajeADecodificar.toString();
         //index para recorrer la posicion en el arreglo
         //i para recorrer la posicion en la cadena
         int index = 0;
@@ -99,37 +130,47 @@ public class DecodificadorMensajes
         // convertir el arreglo de caracteres a una cadena y imprimir el mensaje desencriptado
         String mensajeDecodificado = new String(nuevoMensaje);
         System.out.println(mensajeDecodificado);
-    }
-    
-    /**
-     * Retorna el mensaje ya decodificado/descifrado.
-     * Precondición: el mensaje debe haber sido decodificado previamente (i.e., 
-     * se debe haber llamado a decodificarMensaje()).
-     * Postcondicion: se retorna el mensaje descifrado/decodificado.
-     * @return el mensaje descifrado.
-     */
-    public Mensaje obtenerMensajeDecodificado() {
-        if (mensajeDecodificado == null)
-            throw new IllegalStateException("Mensaje aún no decodificado");
         return mensajeDecodificado;
     }
     
-    /**
-     * Desencripta una cadena, dado un código numérico. Se usan los dígitos del código
-     * para reemplazar cada caracter de la cadena por el caracter correspondiente a 
-     * "trasladar" el mismo el número de lugares que indica el código, en sentido inverso
-     * al de encripción (es decir, se resta el código al caracter). El código tiene
-     * múltiples valores: se usa el primero para el primer caracter, el segundo para el 
-     * segundo, y así sucesivamente. Si se agota el código, se vuelve al comienzo del mismo, 
-     * hasta desencriptar toda la cadena.
-     * Precondición: tanto str como codigo no deben ser nulos.
-     * @param str es la cadena a desencriptar
-     * @param codigo es el código a utilizar para la desencripción
-     */
-    private String desencriptarCadena(String str, int[] codigo) {
-        // TODO: Implementar este método, sustituyendo la línea
-        // debajo con el código correspondiente a la funcionalidad
-        return null;
+    private String desencriptarCadenaV2(String str, int[] codigo){
+       
+    // index para recorrer la posicion en el arreglo
+    // i para recorrer la posicion en la cadena
+    int index = 0;
+    // arreglo para guardar el mensaje desencriptado
+    char[] nuevoMensaje = new char[str.length()];
+        
+    for(int i = 0; i < str.length(); i++){
+        // conseguir el ascii de cada caracter en la cadena
+        int numAscii = (int) str.charAt(i);
+        // variable para guardar el tamaño del arreglo
+        int tamañoArreglo = codigo.length;
+
+        // condicional para movernos dentro de cada posicion del arreglo una y otra vez
+        if(index >= 0 && index < tamañoArreglo){
+            // condicional para manejarnos dentro del rango 0-127 en ascii
+            if(numAscii - codigo[index] < 0){
+                numAscii += 128;
+            }
+            // desencriptar el carácter restando el valor del código de encriptación
+            int k = numAscii - codigo[index];
+            // almacenar el carácter desencriptado en el nuevo mensaje
+            nuevoMensaje[i] = (char) k;
+            // incrementar el índice
+            index++;
+        }
+        // reiniciar el índice si se llega al final del arreglo de encriptación
+        if(index >= tamañoArreglo){
+            index = 0;
+        }
     }
-    
+       
+    // convertir el arreglo de caracteres a una cadena y devolver el mensaje desencriptado
+    String mensajeDecodificado = new String(nuevoMensaje);
+    System.out.println(nuevoMensaje);
+    return mensajeDecodificado;
+    }
+
 }
+

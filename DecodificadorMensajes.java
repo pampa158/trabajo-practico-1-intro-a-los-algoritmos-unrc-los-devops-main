@@ -69,11 +69,13 @@ public class DecodificadorMensajes
         *mensajeDecodificado = new Mensaje();
         *mensajeDecodificado.agregarLinea(cadenaNueva);
         */
-       
-        String cadena = mensajeADecodificar.toString();
-        String cadenaNueva = desencriptarCadena(cadena, codigoEncripcion);
         mensajeDecodificado = new Mensaje();
-        mensajeDecodificado.agregarLinea(cadenaNueva);
+        for(int x = 0; x < mensajeADecodificar.cantLineas(); x++){
+            String cadena = mensajeADecodificar.obtenerLinea(x);
+            String cadenaNueva = desencriptarCadena(cadena, codigoEncripcion);
+            mensajeDecodificado.agregarLinea(cadenaNueva);
+        }
+        
     }
     
     /**
@@ -108,7 +110,7 @@ public class DecodificadorMensajes
     // i para recorrer la posicion en la cadena
     int index = 0;
     // arreglo para guardar el mensaje desencriptado
-    char[] nuevoMensaje = new char[str.length()];
+    //char[] nuevoMensaje = new char[str.length()];
     //variable para guardar cadenas
     String mensajeDesencriptado = "";
     for(int i = 0; i < str.length(); i++){
@@ -120,24 +122,26 @@ public class DecodificadorMensajes
         //
         int esMenor = (int) ((charAsciiEncriptado - codigo[index]) % 128);
         char charAsciiDesencriptado;
-        if(esMenor < 0){
-            charAsciiDesencriptado = (char) (((charAsciiEncriptado - codigo[index]) % 128) + 128);
+        if(esMenor == 0){
+            charAsciiDesencriptado = 127;
+            //charAsciiDesencriptado = (char) (((charAsciiEncriptado - codigo[index]) % 128) + 128);
         }else{
             charAsciiDesencriptado = (char) ((charAsciiEncriptado - codigo[index]) % 128);
         }
+        System.out.println(charAsciiDesencriptado);
         // variable para guardar el tamaño del arreglo
         int tamañoArreglo = codigo.length;
         //concatenacion de caracteres
         mensajeDesencriptado += charAsciiDesencriptado;
         // condicional para movernos dentro de cada posicion del arreglo una y otra vez
-        
+        index = (index + 1) % tamañoArreglo;
         // condicional para manejarnos dentro del rango 0-127 en ascii
         /**if(index >= 0 && index < tamañoArreglo){
             
             // desencriptar el carácter restando el valor del código de encriptación
-            int k = charAsciiDesencriptado;
+            
             // almacenar el carácter desencriptado en el nuevo mensaje
-            nuevoMensaje[i] = (char) k;
+            nuevoMensaje[i] = (char) charAsciiDesencriptado;
             // incrementar el índice
             index++;
             if(index >= tamañoArreglo){
@@ -145,13 +149,14 @@ public class DecodificadorMensajes
             }
         }
         */
+        
         // reiniciar el índice si se llega al final del arreglo de encriptación
         
     }
        
     // convertir el arreglo de caracteres a una cadena y devolver el mensaje desencriptado
     //String mensajeDecodificado1 = new String(nuevoMensaje);
-    System.out.println(mensajeDesencriptado);//Esto hay que sacarlo"""""""""""""""""""
+    System.out.println(mensajeDesencriptado);//sacar""""
     System.out.println();
     return mensajeDesencriptado;
     

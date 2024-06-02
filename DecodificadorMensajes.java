@@ -61,13 +61,19 @@ public class DecodificadorMensajes
         //Precondición para chequear que el mensaje aun no fue decodificado
         /**     if(mensajeDecodificado != null)
            *        //mensaje ya decodificado
-        *       throw new IllegalStateException("El mensajeaun no fue descifrado");
+        *       throw new IllegalStateException("El mensaje aun no fue descifrado");
         */
+        
+        /**String cadena = mensajeADecodificar.toString();
+        *String cadenaNueva = desencriptarCadena(cadena, codigoEncripcion);
+        *mensajeDecodificado = new Mensaje();
+        *mensajeDecodificado.agregarLinea(cadenaNueva);
+        */
+       
         String cadena = mensajeADecodificar.toString();
         String cadenaNueva = desencriptarCadena(cadena, codigoEncripcion);
         mensajeDecodificado = new Mensaje();
         mensajeDecodificado.agregarLinea(cadenaNueva);
-        
     }
     
     /**
@@ -103,36 +109,94 @@ public class DecodificadorMensajes
     int index = 0;
     // arreglo para guardar el mensaje desencriptado
     char[] nuevoMensaje = new char[str.length()];
-        
+    //variable para guardar cadenas
+    String mensajeDesencriptado = "";
     for(int i = 0; i < str.length(); i++){
         // conseguir el ascii de cada caracter en la cadena
-        int numAscii = (int) str.charAt(i);
+        //int numAscii = (int) str.charAt(i);
+        
+        //variable para guardar el caracter en la posicion i
+        char charAsciiEncriptado = str.charAt(i);
+        //
+        int esMenor = (int) ((charAsciiEncriptado - codigo[index]) % 128);
+        char charAsciiDesencriptado;
+        if(esMenor < 0){
+            charAsciiDesencriptado = (char) (((charAsciiEncriptado - codigo[index]) % 128) + 128);
+        }else{
+            charAsciiDesencriptado = (char) ((charAsciiEncriptado - codigo[index]) % 128);
+        }
         // variable para guardar el tamaño del arreglo
         int tamañoArreglo = codigo.length;
-
+        //concatenacion de caracteres
+        mensajeDesencriptado += charAsciiDesencriptado;
         // condicional para movernos dentro de cada posicion del arreglo una y otra vez
-        if(index >= 0 && index < tamañoArreglo){
-            // condicional para manejarnos dentro del rango 0-127 en ascii
-            if(numAscii - codigo[index] < 0){
-                numAscii += 128;
-            }
+        
+        // condicional para manejarnos dentro del rango 0-127 en ascii
+        /**if(index >= 0 && index < tamañoArreglo){
+            
             // desencriptar el carácter restando el valor del código de encriptación
-            int k = numAscii - codigo[index];
+            int k = charAsciiDesencriptado;
             // almacenar el carácter desencriptado en el nuevo mensaje
             nuevoMensaje[i] = (char) k;
             // incrementar el índice
             index++;
-        }
-        // reiniciar el índice si se llega al final del arreglo de encriptación
-        if(index >= tamañoArreglo){
+            if(index >= tamañoArreglo){
             index = 0;
+            }
         }
+        */
+        // reiniciar el índice si se llega al final del arreglo de encriptación
+        
     }
        
     // convertir el arreglo de caracteres a una cadena y devolver el mensaje desencriptado
-    String mensajeDecodificado = new String(nuevoMensaje);
-    System.out.println(nuevoMensaje);
-    return mensajeDecodificado;
+    //String mensajeDecodificado1 = new String(nuevoMensaje);
+    System.out.println(mensajeDesencriptado);//Esto hay que sacarlo"""""""""""""""""""
+    System.out.println();
+    return mensajeDesencriptado;
+    
+    }
+    
+    private String desencriptarCadenaV2(String str, int[] codigo){
+        String result = "";
+        int indiceCodigo = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char curr = str.charAt(i);
+            char currEncriptado = (char) ((curr - codigo[indiceCodigo]) % 128);
+            result = result + currEncriptado;
+            indiceCodigo = (indiceCodigo + 1) % (codigo.length);
+        }
+        return result;
+    }
+    
+    private String desencriptarCadenaV3(String str, int[] codigo){
+        // Precondición para comprobar que la cadena a encriptar no sea nula
+        if (str == null) {
+            throw new IllegalArgumentException("Cadena nula");
+        }
+        // Precondición para asegurar que los caracteres del @param str pertenecen a 0<=ASCII<=127
+        for (char i : str.toCharArray()) {
+            if (i < 0 || i > 127) {
+                throw new IllegalArgumentException("Existen caracteres no pertenecientes a ASCII");
+            }
+        }
+        //Inicializacion del método
+        //Vuelve @param str en lista, recorriendolo y sumando sus valores ASCII
+        int sumaAscii = 0;
+        for (char i : str.toCharArray()) {
+            sumaAscii -= (int) i;
+        }
+        //Crea un código de encripción en formato de arreglo
+        int resto = sumaAscii % 99991;
+        String restoStr = String.valueOf(resto);
+        // Postcondición comprueba que el largo del arreglo que nos devuelve, sea igual al
+        // largo de la cadena que le ingresamos como parámetro real
+        /**if (codigo.length != restoStr.length()) {
+        *    throw new IllegalStateException("Generación del código de encripción fallida");
+        */
+        String mensajeDesencriptado = "";
+        return mensajeDesencriptado;
+        
     }
 
 }
